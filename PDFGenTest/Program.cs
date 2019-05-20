@@ -1,4 +1,5 @@
 ﻿using Aspose.Words;
+using PDFGenTest.Converters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,30 +24,47 @@ namespace PDFGenTest
             if (!Directory.Exists(outputDirectory))
                 Directory.CreateDirectory(outputDirectory);
 
-
-            Console.WriteLine($"Processing of {files.Length} files started.");
-            int counter = 0;
-            stopwatch.Start();
-
-            foreach (var file in files)
+            var converters = new Dictionary<string, IConvert>()
             {
-                Console.WriteLine($"Processing file {++counter}/{files.Length}: {Path.GetFileName(file)}...");
-                string outputFileName = $"{Path.GetFileNameWithoutExtension(file)}.pdf";
-                string outputFilePath = Path.Combine(outputDirectory, outputFileName);
+                { nameof(AsposeWord), new AsposeWord() },
+            }; 
+            
+            Console.WriteLine($"Processing of {files.Length} files using {converters.Count} converters started.\n");
+            int counter = 0;
+            
 
-                try
+            foreach (var item in converters)
+            {
+                string converterName = item.Key;
+                Console.WriteLine($"Converter used: {converterName}");
+                IConvert converter = item.Value;
+
+                string outputFolderForConverter = Path.Combine(outputDirectory, converterName);
+                if (!Directory.Exists(outputFolderForConverter))
+                    Directory.CreateDirectory(outputFolderForConverter);
+
+                stopwatch.Start();
+                foreach (var file in files)
                 {
+                    Console.WriteLine($"Processing file {++counter}/{files.Length}: {Path.GetFileName(file)}...");
+                    string outputFileName = $"{Path.GetFileNameWithoutExtension(file)}.pdf";
+                    string outputFilePath = Path.Combine(outputFolderForConverter, outputFileName);
+
+                    try
+                    {
+                        converter.ConvertToPDF(file, outputFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Exception: {ex.Message}");
+                    }
 
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Exception: {ex.Message}");
-                }
-                
+                stopwatch.Stop();
+                Console.WriteLine($"Processing of {files.Length} files with {converterName} converter completed in: {stopwatch.Elapsed.Seconds} seconds.\n");
+
             }
 
-            stopwatch.Stop();
-            Console.WriteLine($"Processing of {files.Length} completed in: {stopwatch.Elapsed.Seconds} seconds.");
             Console.ReadKey();
         }
 

@@ -9,7 +9,7 @@ namespace PDFGenTest.Converters
 {
     public class AsposeWord : IConvert
     {
-        public void ToConvertPDF(string inputFilePath, string outputFilePath)
+        public void ConvertToPDF(string inputFilePath, string outputFilePath)
         {
             Document doc = new Document(inputFilePath);
             doc.Save(outputFilePath);
