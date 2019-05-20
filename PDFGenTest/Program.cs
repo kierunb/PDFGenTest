@@ -34,7 +34,15 @@ namespace PDFGenTest
                 string outputFileName = $"{Path.GetFileNameWithoutExtension(file)}.pdf";
                 string outputFilePath = Path.Combine(outputDirectory, outputFileName);
 
-                AsposeWordConvert(file, outputFilePath);
+                try
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
+                
             }
 
             stopwatch.Stop();
@@ -42,22 +50,6 @@ namespace PDFGenTest
             Console.ReadKey();
         }
 
-
-        static void AsposeWordConvert(string inputFilePath, string outputFilePath)
-        {
-            try
-            {
-                Document doc = new Document(inputFilePath);
-                doc.Save(outputFilePath);
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine($"Exception: {ex.Message}");
-            }
-
-
-        }
 
 
 
