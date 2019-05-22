@@ -9,5 +9,6 @@ namespace PDFGenTest.Converters
     public interface IConvert
     {
         void ConvertToPDF(string inputFilePath, string outputFilePath);
+        void ConvertToPDF(string[] inputFilePath, string[] outputFilePath);
     }
 }

@@ -12,7 +12,16 @@ namespace PDFGenTest.Converters
         public void ConvertToPDF(string inputFilePath, string outputFilePath)
         {
             Document doc = new Document(inputFilePath);
+            doc.UpdateFields();
+            doc.UpdatePageLayout();
+            doc.UpdateTableLayout();
+            doc.UpdateListLabels();
             doc.Save(outputFilePath);
+        }
+
+        public void ConvertToPDF(string[] inputFilePath, string[] outputFilePath)
+        {
+            throw new NotImplementedException();
         }
     }
 }
